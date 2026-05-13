@@ -298,17 +298,6 @@
   .submit-btn:hover{background:var(--rust)}
   .submit-btn:disabled{opacity:0.4;cursor:not-allowed}
 
-  .toast{
-    position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(120%);
-    background:var(--forest-deep);color:var(--paper);
-    padding:16px 24px;font-size:13px;letter-spacing:0.04em;
-    z-index:100;transition:transform 0.4s ease;
-    box-shadow:0 12px 32px rgba(15,36,24,0.25);
-    display:flex;align-items:center;gap:12px;
-  }
-  .toast.show{transform:translateX(-50%) translateY(0)}
-  .toast::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--moss-light)}
-
   /* COMMUNICATIONS LIST */
   .comms-section{
     padding:48px 0 0;border-top:2px solid var(--ink);
@@ -476,8 +465,6 @@
     Resp.: Profª Katiuscia Wilhelm Kangerski
   </div>
 </footer>
-
-<div class="toast" id="toast">Comunicação enviada com sucesso · Status: em análise</div>
 
 <script>
 // ============================================================
@@ -736,11 +723,6 @@ $('#comm-form').addEventListener('submit', (e) => {
 
   $('#comm-form').reset();
   renderComms(currentUC.id);
-
-  // Toast feedback
-  const t = $('#toast');
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3200);
 
   // Scroll para a lista de comunicações
   document.querySelector('.comms-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
