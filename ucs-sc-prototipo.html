@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UCs SC — Unidades de Conservação de Santa Catarina</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=DM+Sans:opsz,wght@9..40,300..700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+  :root{
+    --paper:#F4EFE3;
+    --paper-2:#EBE4D2;
+    --ink:#1B1A14;
+    --ink-soft:#3D3A2C;
+    --forest:#1F3A2B;
+    --forest-deep:#0F2418;
+    --moss:#6A8F62;
+    --moss-light:#A8BE8E;
+    --umber:#8B5A2B;
+    --rust:#B14F32;
+    --line:rgba(27,26,20,0.18);
+    --line-soft:rgba(27,26,20,0.08);
+  }
+
+  html,body{background:var(--paper);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  body{
+    min-height:100vh;
+    background-image:
+      radial-gradient(circle at 20% 10%,rgba(106,143,98,0.08) 0%,transparent 40%),
+      radial-gradient(circle at 80% 80%,rgba(139,90,43,0.05) 0%,transparent 35%);
+  }
+
+  /* Subtle paper grain */
+  body::before{
+    content:'';
+    position:fixed;inset:0;pointer-events:none;z-index:1;
+    opacity:0.4;mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.1 0 0 0 0 0.1 0 0 0 0 0.05 0 0 0 0.07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  a{color:inherit;text-decoration:none}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  input,textarea{font-family:inherit;font-size:inherit;color:inherit}
+
+  /* HEADER */
+  header.site{
+    position:relative;z-index:10;
+    border-bottom:1px solid var(--line);
+    padding:22px 48px;
+    display:flex;align-items:center;justify-content:space-between;
+    background:var(--paper);
+  }
+  .brand{display:flex;align-items:baseline;gap:14px}
+  .brand-mark{
+    font-family:'Fraunces',serif;font-weight:600;font-size:26px;
+    letter-spacing:-0.02em;color:var(--forest-deep);
+    font-style:italic;
+  }
+  .brand-mark::first-letter{font-size:34px;color:var(--rust)}
+  .brand-sub{
+    font-size:11px;text-transform:uppercase;letter-spacing:0.22em;
+    color:var(--ink-soft);font-weight:500;
+  }
+  .nav-meta{
+    display:flex;align-items:center;gap:28px;
+    font-size:12px;text-transform:uppercase;letter-spacing:0.18em;
+    color:var(--ink-soft);font-weight:500;
+  }
+  .nav-meta .dot{width:6px;height:6px;border-radius:50%;background:var(--moss);display:inline-block;margin-right:8px;animation:pulse 2.4s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+  /* CONTENT WRAPPER */
+  main{position:relative;z-index:5;padding:0 48px 80px;max-width:1400px;margin:0 auto}
+
+  /* HERO */
+  .hero{
+    padding:80px 0 60px;
+    border-bottom:1px solid var(--line);
+    display:grid;grid-template-columns:1fr auto;gap:48px;align-items:end;
+  }
+  .hero-eyebrow{
+    font-size:12px;text-transform:uppercase;letter-spacing:0.32em;
+    color:var(--rust);font-weight:600;margin-bottom:24px;
+    display:flex;align-items:center;gap:14px;
+  }
+  .hero-eyebrow::before{content:'';width:42px;height:1px;background:var(--rust)}
+  .hero h1{
+    font-family:'Fraunces',serif;font-weight:300;
+    font-size:clamp(48px,7vw,96px);line-height:0.96;letter-spacing:-0.035em;
+    color:var(--forest-deep);max-width:14ch;
+  }
+  .hero h1 em{font-style:italic;font-weight:400;color:var(--rust)}
+  .hero-meta{
+    text-align:right;font-size:13px;color:var(--ink-soft);
+    border-left:1px solid var(--line);padding-left:32px;
+    line-height:1.7;
+  }
+  .hero-meta strong{color:var(--forest-deep);font-weight:600;display:block;font-size:32px;font-family:'Fraunces',serif;margin-bottom:4px}
+
+  /* INTRO */
+  .intro{
+    padding:48px 0;border-bottom:1px solid var(--line);
+    display:grid;grid-template-columns:200px 1fr;gap:48px;
+  }
+  .intro-label{
+    font-size:11px;text-transform:uppercase;letter-spacing:0.24em;
+    color:var(--ink-soft);font-weight:600;
+  }
+  .intro-text{
+    font-family:'Fraunces',serif;font-size:22px;font-weight:300;line-height:1.45;
+    color:var(--ink);max-width:64ch;letter-spacing:-0.005em;
+  }
+  .intro-text::first-letter{
+    font-size:64px;float:left;line-height:0.85;
+    padding:6px 12px 0 0;font-weight:400;color:var(--rust);
+    font-style:italic;
+  }
+
+  /* SECTION HEADER */
+  .section-head{
+    padding:56px 0 32px;
+    display:flex;align-items:flex-end;justify-content:space-between;
+    border-bottom:2px solid var(--ink);margin-bottom:0;
+  }
+  .section-head h2{
+    font-family:'Fraunces',serif;font-weight:400;font-size:42px;
+    letter-spacing:-0.025em;color:var(--forest-deep);
+  }
+  .section-head h2 em{font-style:italic;color:var(--rust)}
+  .section-count{
+    font-size:12px;text-transform:uppercase;letter-spacing:0.22em;
+    color:var(--ink-soft);font-weight:500;padding-bottom:8px;
+  }
+  .section-count strong{color:var(--forest-deep);font-size:14px;font-weight:700}
+
+  /* GRID OF UCs */
+  .uc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0;border-bottom:2px solid var(--ink)}
+  .uc-card{
+    border-right:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    padding:32px;
+    display:grid;grid-template-columns:120px 1fr;gap:28px;
+    cursor:pointer;
+    transition:background 0.4s ease;
+    position:relative;
+  }
+  .uc-card:nth-child(2n){border-right:none}
+  .uc-card:hover{background:var(--paper-2)}
+  .uc-card:hover .uc-image{transform:scale(1.04)}
+  .uc-card:hover .uc-arrow{transform:translateX(6px);color:var(--rust)}
+
+  .uc-number{
+    position:absolute;top:18px;right:24px;
+    font-family:'Fraunces',serif;font-style:italic;font-weight:300;
+    font-size:14px;color:var(--ink-soft);
+  }
+  .uc-image-wrap{
+    width:120px;height:160px;overflow:hidden;
+    border:1px solid var(--line);
+    background:var(--paper-2);
+    position:relative;
+  }
+  .uc-image{
+    width:100%;height:100%;object-fit:cover;
+    transition:transform 0.6s ease;
+    filter:saturate(0.85) contrast(1.05);
+  }
+  .uc-image-wrap::after{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(180deg,transparent 60%,rgba(15,36,24,0.25) 100%);
+    pointer-events:none;
+  }
+  .uc-meta{display:flex;flex-direction:column;gap:6px}
+  .uc-category{
+    font-size:10px;text-transform:uppercase;letter-spacing:0.24em;
+    color:var(--rust);font-weight:600;margin-bottom:4px;
+  }
+  .uc-name{
+    font-family:'Fraunces',serif;font-weight:400;font-size:26px;
+    line-height:1.1;letter-spacing:-0.02em;color:var(--forest-deep);
+    margin-bottom:6px;
+  }
+  .uc-desc{
+    font-size:13px;line-height:1.55;color:var(--ink-soft);
+    margin-bottom:14px;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  }
+  .uc-info{
+    margin-top:auto;
+    display:flex;flex-wrap:wrap;gap:14px 22px;
+    font-size:11px;color:var(--ink-soft);
+    padding-top:14px;border-top:1px solid var(--line-soft);
+  }
+  .uc-info span strong{color:var(--forest-deep);font-weight:600;display:block;font-size:10px;text-transform:uppercase;letter-spacing:0.14em;margin-bottom:2px}
+  .uc-arrow{
+    position:absolute;bottom:24px;right:24px;
+    font-family:'Fraunces',serif;font-size:24px;
+    color:var(--ink-soft);
+    transition:transform 0.3s ease,color 0.3s ease;
+  }
+
+  /* DETAIL VIEW */
+  .detail{display:none;padding:0}
+  .detail.active{display:block;animation:fadeUp 0.5s ease}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+  .back-link{
+    display:inline-flex;align-items:center;gap:10px;
+    padding:48px 0 24px;
+    font-size:12px;text-transform:uppercase;letter-spacing:0.22em;
+    color:var(--ink-soft);font-weight:500;
+    transition:color 0.3s ease,gap 0.3s ease;
+  }
+  .back-link:hover{color:var(--rust);gap:16px}
+
+  .detail-header{
+    display:grid;grid-template-columns:1.1fr 1fr;gap:64px;
+    padding:24px 0 48px;border-bottom:2px solid var(--ink);
+  }
+  .detail-header-text .uc-category{margin-bottom:18px;font-size:11px}
+  .detail-header h1{
+    font-family:'Fraunces',serif;font-weight:300;
+    font-size:clamp(40px,5.5vw,72px);line-height:0.98;letter-spacing:-0.03em;
+    color:var(--forest-deep);margin-bottom:32px;
+  }
+  .detail-header h1 em{font-style:italic;color:var(--rust)}
+  .detail-info{
+    display:grid;grid-template-columns:1fr 1fr;gap:24px 32px;
+    padding:24px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  }
+  .detail-info dt{font-size:10px;text-transform:uppercase;letter-spacing:0.22em;color:var(--ink-soft);font-weight:600;margin-bottom:6px}
+  .detail-info dd{font-size:14px;color:var(--forest-deep);font-weight:500;line-height:1.45}
+  .detail-image{
+    aspect-ratio:4/5;overflow:hidden;border:1px solid var(--line);
+    position:relative;
+  }
+  .detail-image img{width:100%;height:100%;object-fit:cover;filter:saturate(0.9) contrast(1.05)}
+  .detail-image::after{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(180deg,transparent 50%,rgba(15,36,24,0.2) 100%);
+  }
+
+  .detail-body{
+    display:grid;grid-template-columns:1.2fr 1fr;gap:64px;
+    padding:56px 0;
+  }
+
+  .detail-description{
+    font-family:'Fraunces',serif;font-size:19px;font-weight:300;line-height:1.55;
+    color:var(--ink);letter-spacing:-0.005em;
+  }
+  .detail-description p+p{margin-top:18px}
+
+  /* COMMUNICATION FORM */
+  .form-card{
+    background:var(--paper-2);
+    border:1px solid var(--line);
+    padding:36px;
+    position:relative;
+  }
+  .form-card::before{
+    content:'';position:absolute;top:-1px;left:-1px;width:40px;height:40px;
+    border-top:2px solid var(--rust);border-left:2px solid var(--rust);
+  }
+  .form-card h3{
+    font-family:'Fraunces',serif;font-weight:400;font-size:28px;
+    letter-spacing:-0.02em;color:var(--forest-deep);
+    margin-bottom:8px;line-height:1.1;
+  }
+  .form-card h3 em{font-style:italic;color:var(--rust)}
+  .form-card p.lede{font-size:13px;color:var(--ink-soft);margin-bottom:28px;line-height:1.55}
+
+  .field{margin-bottom:18px}
+  .field label{
+    display:block;font-size:10px;text-transform:uppercase;letter-spacing:0.22em;
+    color:var(--ink-soft);font-weight:600;margin-bottom:8px;
+  }
+  .field input,.field textarea{
+    width:100%;background:var(--paper);
+    border:1px solid var(--line);
+    padding:12px 14px;
+    font-size:14px;line-height:1.45;
+    transition:border-color 0.2s ease,background 0.2s ease;
+    border-radius:0;
+  }
+  .field textarea{min-height:110px;resize:vertical;font-family:inherit}
+  .field input:focus,.field textarea:focus{
+    outline:none;border-color:var(--forest);
+    background:#fff;
+  }
+  .submit-btn{
+    width:100%;padding:16px;
+    background:var(--forest-deep);color:var(--paper);
+    font-size:11px;text-transform:uppercase;letter-spacing:0.28em;font-weight:600;
+    transition:background 0.3s ease;
+    margin-top:8px;
+  }
+  .submit-btn:hover{background:var(--rust)}
+  .submit-btn:disabled{opacity:0.4;cursor:not-allowed}
+
+  .toast{
+    position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(120%);
+    background:var(--forest-deep);color:var(--paper);
+    padding:16px 24px;font-size:13px;letter-spacing:0.04em;
+    z-index:100;transition:transform 0.4s ease;
+    box-shadow:0 12px 32px rgba(15,36,24,0.25);
+    display:flex;align-items:center;gap:12px;
+  }
+  .toast.show{transform:translateX(-50%) translateY(0)}
+  .toast::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--moss-light)}
+
+  /* COMMUNICATIONS LIST */
+  .comms-section{
+    padding:48px 0 0;border-top:2px solid var(--ink);
+  }
+  .comms-list{display:flex;flex-direction:column;gap:0;margin-top:32px}
+  .comm{
+    padding:28px 0;border-bottom:1px solid var(--line);
+    display:grid;grid-template-columns:140px 1fr auto;gap:32px;align-items:start;
+    transition:background 0.3s ease;
+  }
+  .comm:hover{background:var(--paper-2);padding-left:16px;padding-right:16px;margin:0 -16px}
+  .comm-date{
+    font-family:'Fraunces',serif;font-style:italic;font-weight:300;
+    font-size:14px;color:var(--ink-soft);line-height:1.3;
+  }
+  .comm-date strong{display:block;font-size:24px;color:var(--forest-deep);font-style:normal;font-weight:400;margin-bottom:2px}
+  .comm-body h4{
+    font-family:'Fraunces',serif;font-weight:500;font-size:22px;
+    letter-spacing:-0.015em;color:var(--forest-deep);margin-bottom:8px;line-height:1.2;
+  }
+  .comm-body p{font-size:14px;line-height:1.6;color:var(--ink-soft);margin-bottom:10px}
+  .comm-email{font-size:11px;color:var(--ink-soft);font-family:'DM Sans',sans-serif;letter-spacing:0.04em}
+  .comm-email::before{content:'✉ ';color:var(--rust)}
+  .status-badge{
+    font-size:9px;text-transform:uppercase;letter-spacing:0.22em;font-weight:700;
+    padding:6px 10px;border:1px solid var(--line);
+    white-space:nowrap;align-self:start;
+  }
+  .status-0{color:var(--umber);border-color:var(--umber);background:rgba(139,90,43,0.06)}
+  .status-1{color:var(--forest);border-color:var(--forest);background:rgba(31,58,43,0.06)}
+
+  .comms-empty{
+    padding:56px 0;text-align:center;
+    font-family:'Fraunces',serif;font-style:italic;font-size:18px;
+    color:var(--ink-soft);
+  }
+
+  /* FOOTER */
+  footer{
+    position:relative;z-index:5;
+    border-top:2px solid var(--ink);margin-top:80px;
+    padding:48px;
+    display:flex;justify-content:space-between;align-items:flex-end;
+    font-size:11px;text-transform:uppercase;letter-spacing:0.2em;color:var(--ink-soft);
+  }
+  footer .foot-mark{font-family:'Fraunces',serif;font-style:italic;font-size:18px;text-transform:none;letter-spacing:-0.01em;color:var(--forest-deep)}
+
+  /* RESPONSIVE */
+  @media (max-width:900px){
+    header.site{padding:18px 24px;flex-direction:column;gap:12px;align-items:flex-start}
+    main{padding:0 24px 60px}
+    .hero{grid-template-columns:1fr;padding:48px 0 32px;gap:24px}
+    .hero-meta{text-align:left;border-left:none;border-top:1px solid var(--line);padding:20px 0 0}
+    .intro{grid-template-columns:1fr;gap:16px;padding:32px 0}
+    .uc-grid{grid-template-columns:1fr}
+    .uc-card{border-right:none}
+    .detail-header{grid-template-columns:1fr;gap:32px}
+    .detail-body{grid-template-columns:1fr;gap:40px}
+    .comm{grid-template-columns:1fr;gap:8px}
+    .section-head{flex-direction:column;align-items:flex-start;gap:8px}
+    footer{padding:32px 24px;flex-direction:column;gap:14px;align-items:flex-start}
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="brand">
+    <span class="brand-mark">UCs · SC</span>
+    <span class="brand-sub">Unidades de Conservação</span>
+  </div>
+  <nav class="nav-meta">
+    <span><span class="dot"></span>Sistema Público</span>
+    <span>Hands-On VI · 2026/1</span>
+  </nav>
+</header>
+
+<main>
+  <!-- LIST VIEW -->
+  <section id="view-list">
+    <div class="hero">
+      <div>
+        <div class="hero-eyebrow">Zona Costeira Catarinense</div>
+        <h1>Conhecer e <em>proteger</em> nossas unidades de conservação.</h1>
+      </div>
+      <div class="hero-meta">
+        <strong>10</strong>
+        Unidades sob gestão do<br>IMA · Santa Catarina
+      </div>
+    </div>
+
+    <div class="intro">
+      <div class="intro-label">SOBRE</div>
+      <div class="intro-text">
+        Plataforma pública para conhecimento das unidades de conservação catarinenses e canal direto de comunicação com as autoridades responsáveis. Reporte problemas, encaminhe sugestões e acompanhe as manifestações da comunidade.
+      </div>
+    </div>
+
+    <div class="section-head">
+      <h2>Unidades <em>cadastradas</em></h2>
+      <div class="section-count"><strong id="uc-count">—</strong> registros disponíveis</div>
+    </div>
+
+    <div class="uc-grid" id="uc-grid"></div>
+  </section>
+
+  <!-- DETAIL VIEW -->
+  <section class="detail" id="view-detail">
+    <a class="back-link" id="back-btn">← Voltar para todas as unidades</a>
+
+    <div class="detail-header">
+      <div class="detail-header-text">
+        <div class="uc-category" id="d-category">PARQUE ESTADUAL</div>
+        <h1 id="d-name"></h1>
+        <dl class="detail-info">
+          <div><dt>Criação</dt><dd id="d-created"></dd></div>
+          <div><dt>Instituição</dt><dd id="d-institution"></dd></div>
+          <div style="grid-column:span 2"><dt>Municípios</dt><dd id="d-cities"></dd></div>
+        </dl>
+      </div>
+      <div class="detail-image"><img id="d-image" alt=""></div>
+    </div>
+
+    <div class="detail-body">
+      <div class="detail-description" id="d-description"></div>
+
+      <div class="form-card">
+        <h3>Enviar <em>comunicação</em></h3>
+        <p class="lede">Reporte problemas ou encaminhe sugestões à autoridade responsável. Sua mensagem será analisada por administradores especialistas.</p>
+        <form id="comm-form">
+          <div class="field">
+            <label for="f-title">Título da comunicação</label>
+            <input id="f-title" type="text" required maxlength="120" placeholder="Ex.: Trilha do mirante danificada">
+          </div>
+          <div class="field">
+            <label for="f-desc">Descrição detalhada</label>
+            <textarea id="f-desc" required maxlength="1500" placeholder="Descreva a situação observada, localização aproximada e demais detalhes relevantes."></textarea>
+          </div>
+          <div class="field">
+            <label for="f-email">Seu e-mail</label>
+            <input id="f-email" type="email" required placeholder="seu@email.com.br">
+          </div>
+          <button class="submit-btn" type="submit">Enviar Comunicação →</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="comms-section">
+      <div class="section-head" style="border-bottom:none;padding:0 0 24px">
+        <h2>Comunicações <em>recebidas</em></h2>
+        <div class="section-count"><strong id="comm-count">0</strong> registros · ordenados das mais recentes</div>
+      </div>
+      <div class="comms-list" id="comms-list"></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div>
+    <div class="foot-mark">UCs · Santa Catarina</div>
+    <div style="margin-top:6px">Protótipo Acadêmico · UNIVALI · ADS</div>
+  </div>
+  <div style="text-align:right">
+    Projeto de Extensão · Unidades de Conservação é Preciso<br>
+    Resp.: Profª Katiuscia Wilhelm Kangerski
+  </div>
+</footer>
+
+<div class="toast" id="toast">Comunicação enviada com sucesso · Status: em análise</div>
+
+<script>
+// ============================================================
+// MODELO DE DADOS — simulando o banco relacional do Etapa 1
+// ============================================================
+
+const DB = {
+  instituicoes: [
+    { id: 1, nome: 'IMA — Instituto do Meio Ambiente de Santa Catarina' },
+    { id: 2, nome: 'ICMBio — Instituto Chico Mendes' },
+  ],
+  municipios: [
+    { id: 1, nome: 'São Francisco do Sul' },
+    { id: 2, nome: 'Garuva' },
+    { id: 3, nome: 'Siderópolis' },
+    { id: 4, nome: 'Treviso' },
+    { id: 5, nome: 'Passos Maia' },
+    { id: 6, nome: 'Ponte Serrada' },
+    { id: 7, nome: 'Alfredo Wagner' },
+    { id: 8, nome: 'Botuverá' },
+    { id: 9, nome: 'Concórdia' },
+    { id: 10, nome: 'Campos Novos' },
+    { id: 11, nome: 'Florianópolis' },
+    { id: 12, nome: 'Benedito Novo' },
+  ],
+  unidades: [
+    {
+      id: 1, categoria: 'Parque Estadual',
+      nome: 'Parque Estadual Acaraí',
+      data_criacao: '2005-09-05',
+      instituicao_id: 1,
+      municipios: [1],
+      descricao: 'Localizado no litoral norte catarinense, o Parque Estadual Acaraí protege um dos mais importantes remanescentes de restinga do estado, abrigando ecossistemas costeiros que incluem dunas, lagoas, manguezais e Floresta Ombrófila Densa de Terras Baixas. A unidade conserva espécies emblemáticas da Mata Atlântica e oferece refúgio a fauna marinha e migratória, sendo essencial para a manutenção dos ciclos ecológicos da região costeira.',
+      imagem: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=900&q=80'
+    },
+    {
+      id: 2, categoria: 'Reserva Biológica',
+      nome: 'Reserva Biológica Estadual do Aguaí',
+      data_criacao: '1983-06-21',
+      instituicao_id: 1,
+      municipios: [3, 4],
+      descricao: 'Situada no sul do estado, a Reserva Biológica do Aguaí protege importantes nascentes e remanescentes de Floresta Ombrófila Densa Montana. Por seu caráter de proteção integral, o acesso é restrito exclusivamente a pesquisadores, garantindo a preservação de espécies ameaçadas e a integridade dos ecossistemas montanhosos da Serra Geral.',
+      imagem: 'https://images.unsplash.com/photo-1448375240586-882707db888b?w=900&q=80'
+    },
+    {
+      id: 3, categoria: 'Parque Estadual',
+      nome: 'Parque Estadual das Araucárias',
+      data_criacao: '2003-09-25',
+      instituicao_id: 1,
+      municipios: [5, 6],
+      descricao: 'Protege um dos últimos remanescentes contínuos de Floresta Ombrófila Mista, ecossistema típico do planalto sul-brasileiro dominado pela imponente Araucaria angustifolia. A unidade é refúgio de espécies da fauna serrana e abriga diversidade biológica única da região do contestado, com paisagens marcadas pelos pinheirais centenários.',
+      imagem: 'https://images.unsplash.com/photo-1473773508845-188df298d2d1?w=900&q=80'
+    },
+    {
+      id: 4, categoria: 'Reserva Biológica',
+      nome: 'Reserva Biológica da Canela Preta',
+      data_criacao: '2010-04-29',
+      instituicao_id: 1,
+      municipios: [8, 12],
+      descricao: 'Conserva área de altíssima relevância biológica no Vale do Itajaí, protegendo espécies endêmicas e ameaçadas da Floresta Atlântica. O nome homenageia a árvore canela-preta (Ocotea catharinensis), espécie ameaçada que encontra na unidade um de seus principais refúgios, junto a uma rica biodiversidade de aves, mamíferos e anfíbios.',
+      imagem: 'https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=900&q=80'
+    },
+    {
+      id: 5, categoria: 'Parque Estadual',
+      nome: 'Parque Estadual Fritz Plaumann',
+      data_criacao: '2003-09-23',
+      instituicao_id: 1,
+      municipios: [9],
+      descricao: 'Em homenagem ao naturalista Frei Fritz Plaumann, a unidade protege remanescentes da Floresta Estacional Decidual às margens do rio Uruguai. Com infraestrutura para pesquisa e visitação educativa, é referência em educação ambiental no oeste catarinense, abrigando espécies da fauna e flora características do bioma Mata Atlântica.',
+      imagem: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=900&q=80'
+    },
+    {
+      id: 6, categoria: 'Parque Estadual',
+      nome: 'Parque Estadual do Rio Vermelho',
+      data_criacao: '2007-06-08',
+      instituicao_id: 1,
+      municipios: [11],
+      descricao: 'Localizado na Ilha de Santa Catarina, em Florianópolis, protege ecossistemas costeiros que incluem restinga, dunas, lagoas e remanescentes de Mata Atlântica. A unidade combina conservação ambiental com função de lazer e educação, oferecendo trilhas, áreas de visitação e abrigando espécies da fauna nativa em pleno ambiente urbano-natural.',
+      imagem: 'https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=900&q=80'
+    }
+  ],
+  // Comunicações pré-cadastradas para demonstração
+  comunicacoes: [
+    {
+      id: 1, unidade_id: 1,
+      titulo: 'Acúmulo de resíduos próximo à entrada principal',
+      descricao: 'Observei grande quantidade de lixo acumulada próximo à portaria da unidade durante visita no último final de semana. Sugiro reforço na fiscalização e instalação de mais coletores de lixo.',
+      email: 'cidadao.atento@email.com',
+      data_envio: '2026-04-22T14:32:00',
+      status: 1
+    },
+    {
+      id: 2, unidade_id: 1,
+      titulo: 'Sinalização de trilha apagada',
+      descricao: 'As placas de sinalização da Trilha das Dunas estão muito desgastadas pelo sol. Visitantes podem se perder. Solicito manutenção urgente.',
+      email: 'visitante@email.com',
+      data_envio: '2026-05-02T09:15:00',
+      status: 0
+    },
+    {
+      id: 3, unidade_id: 3,
+      titulo: 'Avistamento de espécie rara',
+      descricao: 'Durante caminhada de pesquisa, avistamos um casal de papagaios-de-peito-roxo na região leste do parque. Acredito que seja informação relevante para o monitoramento da fauna.',
+      email: 'biologa.campo@univali.br',
+      data_envio: '2026-05-06T16:48:00',
+      status: 0
+    }
+  ]
+};
+
+// ============================================================
+// RENDERIZAÇÃO
+// ============================================================
+
+const $ = (sel) => document.querySelector(sel);
+const fmtDate = (iso) => {
+  const d = new Date(iso);
+  return d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+};
+const fmtDateShort = (iso) => {
+  const d = new Date(iso);
+  return { day: d.getDate(), rest: d.toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' }).replace('.', '') };
+};
+const fmtDateTime = (iso) => {
+  const d = new Date(iso);
+  return d.toLocaleString('pt-BR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' });
+};
+const getInstituicao = (id) => DB.instituicoes.find(i => i.id === id);
+const getMunicipios = (ids) => ids.map(id => DB.municipios.find(m => m.id === id).nome);
+
+function renderList() {
+  const grid = $('#uc-grid');
+  $('#uc-count').textContent = String(DB.unidades.length).padStart(2, '0');
+  grid.innerHTML = DB.unidades.map((uc, idx) => {
+    const cidades = getMunicipios(uc.municipios).join(', ');
+    return `
+      <article class="uc-card" data-id="${uc.id}">
+        <span class="uc-number">— ${String(idx + 1).padStart(2, '0')}</span>
+        <div class="uc-image-wrap">
+          <img class="uc-image" src="${uc.imagem}" alt="${uc.nome}" loading="lazy">
+        </div>
+        <div class="uc-meta">
+          <div class="uc-category">${uc.categoria}</div>
+          <h3 class="uc-name">${uc.nome.replace(uc.categoria, '').trim()}</h3>
+          <p class="uc-desc">${uc.descricao}</p>
+          <div class="uc-info">
+            <span><strong>Criação</strong>${fmtDate(uc.data_criacao)}</span>
+            <span><strong>Município${uc.municipios.length>1?'s':''}</strong>${cidades}</span>
+          </div>
+        </div>
+        <span class="uc-arrow">→</span>
+      </article>
+    `;
+  }).join('');
+
+  grid.querySelectorAll('.uc-card').forEach(card => {
+    card.addEventListener('click', () => openDetail(parseInt(card.dataset.id)));
+  });
+}
+
+let currentUC = null;
+
+function openDetail(id) {
+  const uc = DB.unidades.find(u => u.id === id);
+  if (!uc) return;
+  currentUC = uc;
+
+  $('#d-category').textContent = uc.categoria.toUpperCase();
+  // Highlight italic the differentiator (last word) for editorial feel
+  const nameWords = uc.nome.replace(uc.categoria, '').trim();
+  $('#d-name').innerHTML = nameWords;
+  $('#d-created').textContent = fmtDate(uc.data_criacao);
+  $('#d-institution').textContent = getInstituicao(uc.instituicao_id).nome;
+  $('#d-cities').textContent = getMunicipios(uc.municipios).join(' · ');
+  $('#d-image').src = uc.imagem;
+  $('#d-image').alt = uc.nome;
+  $('#d-description').innerHTML = `<p>${uc.descricao}</p>`;
+
+  renderComms(uc.id);
+
+  $('#view-list').style.display = 'none';
+  $('#view-detail').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'instant' });
+}
+
+function backToList() {
+  $('#view-detail').classList.remove('active');
+  $('#view-list').style.display = '';
+  $('#comm-form').reset();
+  window.scrollTo({ top: 0, behavior: 'instant' });
+}
+
+function renderComms(ucId) {
+  const list = DB.comunicacoes
+    .filter(c => c.unidade_id === ucId)
+    .sort((a, b) => new Date(b.data_envio) - new Date(a.data_envio));
+
+  $('#comm-count').textContent = String(list.length).padStart(2, '0');
+  const target = $('#comms-list');
+
+  if (list.length === 0) {
+    target.innerHTML = `<div class="comms-empty">Ainda não há comunicações registradas. Seja o primeiro a contribuir.</div>`;
+    return;
+  }
+
+  target.innerHTML = list.map(c => {
+    const dt = fmtDateShort(c.data_envio);
+    const statusLabel = c.status === 0 ? 'Em análise' : 'Analisada';
+    return `
+      <article class="comm">
+        <div class="comm-date">
+          <strong>${dt.day}</strong>
+          ${dt.rest}<br>
+          ${new Date(c.data_envio).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}
+        </div>
+        <div class="comm-body">
+          <h4>${escapeHtml(c.titulo)}</h4>
+          <p>${escapeHtml(c.descricao)}</p>
+          <div class="comm-email">${escapeHtml(c.email)}</div>
+        </div>
+        <span class="status-badge status-${c.status}">${statusLabel}</span>
+      </article>
+    `;
+  }).join('');
+}
+
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+}
+
+// ============================================================
+// FORMULÁRIO DE COMUNICAÇÃO — INSERT em DB.comunicacoes
+// ============================================================
+
+$('#comm-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  if (!currentUC) return;
+
+  const titulo = $('#f-title').value.trim();
+  const descricao = $('#f-desc').value.trim();
+  const email = $('#f-email').value.trim();
+  if (!titulo || !descricao || !email) return;
+
+  const novaComm = {
+    id: Math.max(0, ...DB.comunicacoes.map(c => c.id)) + 1,
+    unidade_id: currentUC.id,
+    titulo,
+    descricao,
+    email,
+    data_envio: new Date().toISOString(),
+    status: 0  // padrão: em análise
+  };
+  DB.comunicacoes.push(novaComm);
+
+  $('#comm-form').reset();
+  renderComms(currentUC.id);
+
+  // Toast feedback
+  const t = $('#toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3200);
+
+  // Scroll para a lista de comunicações
+  document.querySelector('.comms-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+$('#back-btn').addEventListener('click', (e) => { e.preventDefault(); backToList(); });
+
+// ============================================================
+// INIT
+// ============================================================
+
+renderList();
+</script>
+
+</body>
+</html>
