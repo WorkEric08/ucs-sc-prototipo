@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Select-String -Path \"ucs-sc-prototipo.html\" -Pattern \"ucs-sc-prototipo\\\\.html\")",
+      "Bash(Select-Object LineNumber, Line)",
+      "Bash(git add *)",
+      "Bash(git rm *)",
+      "Bash(git commit *)",
+      "Bash(git push *)"
+    ]
+  }
+}
